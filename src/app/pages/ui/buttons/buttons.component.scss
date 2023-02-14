@@ -1,0 +1,28 @@
+@mixin md-icon-size($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+  }
+  
+  .mat-icon {
+    @include md-icon-size(22px);
+  }
+
+  .mat-cell {
+    flex: 1;
+    display: flex;
+    align-items: center;
+	display:flex;
+	justify-content:center;    
+}
+
+  .mat-header-cell {
+  	color: white;
+  	font-size: 15px;
+    flex: 1;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    display:flex;
+    justify-content:center;    
+}  

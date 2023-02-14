@@ -1,0 +1,26 @@
+<!-- <mat-toolbar color="#ffffff" [fxLayoutAlign]="(settings.menuType != 'mini') ? 'space-between center' : 'center center'" class="sidenav-header">
+       <h1 *ngIf="hospitalD2.logo == null || hospitalD2.logo == ''; else imglogo">
+       {{first| uppercase}}.{{last | uppercase}}
+       </h1>
+    <ng-template #imglogo>
+        <img [src]="hospitalD2.logo" alt="logo" style="width: 235px; height: 45px;">
+    </ng-template>        
+
+</mat-toolbar>
+
+<div fxLayout="column" fxLayoutAlign="center center" class="user-block transition-2" [class.show]="settings.sidenavUserBlock"> 
+    <div [fxLayout]="(settings.menuType != 'default') ? 'column' : 'row'" 
+         [fxLayoutAlign]="(settings.menuType != 'default') ? 'center center' : 'space-around center'" class="user-info-wrapper">
+        <img [src]="hospitalD2.img" alt="user-image">
+        <div class="user-info">
+            <p class="name">{{hospitalD2.name}}</p>
+            <p *ngIf="settings.menuType == 'default'" class="position"> >
+        </p>
+        </div>
+    </div>
+</div> -->
+
+<!-- <perfect-scrollbar #sidenavPS class="sidenav-menu-outer" [class.user-block-show]="settings.sidenavUserBlock">   
+    <span *ngIf="!menuItems">loading....</span>
+    <app-vertical-menu [menuItems]="menuItems" [menuParentId]="0" (onClickMenuItem)="updatePS($event)"></app-vertical-menu> 
+</perfect-scrollbar> -->

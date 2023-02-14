@@ -1,0 +1,75 @@
+            <mat-card-content *ngIf="datam != 'delete'">
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Diagnosis" (selectionChange)="selectCh($event.value)"  [(ngModel)]="dataOp.diagnosisId" formControlName="diagnosisId" required>
+                                        <mat-option disable>-- Select Diagnosis --</mat-option>
+                                        <mat-option *ngFor="let allDiagnosiss of allDiagnosis?.data" value={{allDiagnosiss._id}}>
+                                            {{allDiagnosiss.diagnosisName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.diagnosisId.valid">diagnosis name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Diagnosis Charges" [(ngModel)]="opCharges" formControlName="diagnosisPrice">
+                                    <mat-error *ngIf="!form.controls.diagnosisPrice.valid">diagnosis charges is required</mat-error>
+                                </mat-form-field>
+                            </td>                            
+                        </tr>
+                    </table>                   
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+<!--                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Operation Date" autocomplete="off" [min]="min" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" formControlName= "operationDate" >   
+                                    <owl-date-time #dt5></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.operationDate.valid">operation date is required</mat-error> 
+                                </mat-form-field>
+                            </td>  -->                           
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Dcotor Name" [(ngModel)]="dataOp.referenceDoctorId"  formControlName="referenceDoctorId" required>
+                                        <mat-option disable>-- Select Operation --</mat-option>
+                                        <mat-option *ngFor="let allDoctors of allDoctor?.data" value={{allDoctors._id}}>
+                                            {{allDoctors.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.referenceDoctorId.valid">Dcotor Name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>     
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                           <td>
+                                <mat-form-field class="w-100">
+                                    <textarea matInput placeholder="description" [(ngModel)]="dataOp.description" formControlName="description"></textarea>
+                                    <mat-error *ngIf="!form.controls.description.valid">description is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>                       
+           
+                    <button style="margin-top: 20px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+
+<mat-card-content *ngIf="datam == 'delete'">
+<h1 mat-dialog-title>
+  Are you sure delete this Patient diagnosis !
+</h1>
+<!-- <div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <input matInput tabindex="1" [(ngModel)]="data.id">
+  </mat-form-field>
+</div> -->
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.id" tabindex="2">No</button>
+  <button mat-button (click)="onNoClickDelete(data.patientDiagnosisId)" tabindex="-1">Yes</button>
+</div>       
+</mat-card-content> 

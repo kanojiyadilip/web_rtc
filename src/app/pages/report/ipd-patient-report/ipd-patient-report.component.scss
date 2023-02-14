@@ -1,0 +1,42 @@
+@mixin md-icon-size($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+  }
+  
+  .mat-icon {
+    @include md-icon-size(22px);
+  }
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  overflow: auto;
+}
+
+th{
+  background-color:#283593;
+  color:#ffffff;
+  font-size: 15px;
+  align-items: center;
+}
+img{
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+}
+
+table {
+  width: 100%;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  background-color: #dddfe8;
+}
+
+td.mat-footer-cell{
+  background-color: #dddfe8;
+}

@@ -1,0 +1,41 @@
+<div fxLayout="column">
+        <div class="flex-p">
+                <div fxLayout="column" class="mat-elevation-z8"> 
+ 
+                    </div>   
+            <div class="example-container mat-elevation-z8 " #TABLE>                  
+            <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">   
+                <ng-container matColumnDef="No">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> No </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                </ng-container>                                       
+                <ng-container matColumnDef="diagnosisName">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.diagnosisName}} </td>
+                </ng-container>  
+                <ng-container matColumnDef="abbreviation">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Abbreviation </th>
+                    <td mat-cell *matCellDef="let element"> {{element.abbreviation}} </td>
+                </ng-container>                    
+                <ng-container matColumnDef="diagnosisPrice">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Chargase </th>
+                    <td mat-cell *matCellDef="let element"> {{element.diagnosisPrice}} </td>
+                </ng-container>         
+                <ng-container matColumnDef="Action">
+                        <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <a routerLink="/diagnosis/update-diagnosis/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                            <mat-icon class="icon-lg">edit</mat-icon>
+                            </a>
+                            <a mat-icon-button>
+                            <mat-icon (click)="deleteDiagnosis(element._id)" class="icon-lg">delete_forever</mat-icon>
+                            </a>
+                        </td>
+                </ng-container>                                                            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            </div>
+            <mat-paginator #paginator (page)="handlePage($event)" [showFirstLastButtons]="true" [pageSize]="pageSize" [length]="totalSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+    </div>

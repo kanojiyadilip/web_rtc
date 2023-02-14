@@ -1,0 +1,19 @@
+.fw-400{
+  font-weight: 400;
+}
+
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  overflow: auto;
+}
+
+th{
+  background-color:#283593;
+  color:#ffffff;
+  font-size: 14px;
+  align-items: center;
+}

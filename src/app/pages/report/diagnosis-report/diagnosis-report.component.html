@@ -1,0 +1,100 @@
+<div fxLayout="column">
+    <div class="flex-p">
+        <div fxLayout="column" class="mat-elevation-z8"> 
+            <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                <table cellspacing="0" class="w-100">   
+                    <tr> 
+                        <td>                                              
+                            <mat-form-field class="w-100">
+                                <input matInput [matDatepicker]="picker1" formControlName="fromDate" placeholder="From Date" >
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>                                    
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="w-100">
+                                <input matInput [matDatepicker]="picker2" formControlName="toDate" placeholder="To Date" >
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>                                    
+                            </mat-form-field>
+                        </td>
+                        <td>
+                        	<mat-form-field class="w-100">
+                                <mat-select placeholder="Doctor" formControlName="doctorId" >
+                                	<!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"> -->
+	                                	<mat-option value="">All</mat-option>
+	                                    <mat-option *ngFor="let allDoctors of allDoctor?.data" value={{allDoctors._id}}>
+	                                        {{allDoctors.name}}
+	                                    </mat-option>
+                                	<!-- </mat-autocomplete> -->
+                                </mat-select> 
+                        	</mat-form-field>	
+                        </td>                       
+                        <td>
+                        	<button mat-raised-button color="primary" class="m-1">Submit</button>
+                        </td>
+                    </tr>
+                </table> 
+            </form>            
+        </div>
+   	</div>
+</div>
+
+
+
+<div fxLayout="column" *ngIf="dataSize > 0">
+        <div class="flex-p">
+        	<div fxLayout="column" class="mat-elevation-z8"> 
+                <table cellspacing="0" class="w-100">
+                    <tr>
+                        <td>                                                
+                            <mat-form-field class="w-100">
+                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                            </mat-form-field> 
+                        </td>
+                        <td>
+                        <button style="margin-bottom:2.5px; background-color: #54e87c; float: right;  width: 80px;" mat-raised-button color="accent" (click)="printToPdf('tablePrint')"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+                        <button style="float: right; max-width: 150px; background-color:#b3cefa" mat-raised-button (click)="ExportTOExcel()"><i class="fa fa-download" aria-hidden="true"></i> Excel</button>                                
+                        </td>
+                    </tr>
+                </table>
+        	</div>	
+			<div class="example-container mat-elevation-z8 " #TABLE>               
+		        <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+			        <ng-container matColumnDef="No">
+			            <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> No. </th>
+			            <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+			            <td mat-footer-cell *matFooterCellDef><p *ngIf="footer == 'true'"> Total </p></td>
+			        </ng-container>                                 
+		            <ng-container matColumnDef="DoctorName">
+		                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Doctor Name </th>
+		                <td mat-cell *matCellDef="let element"> {{element.doctorName}} </td>
+		                <td mat-footer-cell *matFooterCellDef></td>
+		            </ng-container>                    
+		            <ng-container matColumnDef="ipdPatinetName">
+		                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> IPD Patient </th>
+		                <td mat-cell *matCellDef="let element"> {{element.ipdPatinetName}} </td>
+		                <td mat-footer-cell *matFooterCellDef></td>
+		            </ng-container>
+		            <ng-container matColumnDef="diagnosisName">
+		                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Diagnosis Name </th>
+		                <td mat-cell *matCellDef="let element"> {{element.diagnosisName}} </td>
+		                <td mat-footer-cell *matFooterCellDef></td>
+		            </ng-container>		            
+		            <ng-container matColumnDef="charges">
+		                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Charges </th>
+		                <td mat-cell *matCellDef="let element"> {{element.charges | number : '2.2-2'}} </td>
+		                <td mat-footer-cell *matFooterCellDef><p *ngIf="footer == 'true'"> {{overAllTotal | number : '2.2-2'}} </p></td>
+		            </ng-container>          
+<!-- 		            <ng-container matColumnDef="diagnosisDate">
+		                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Date of diagnosis</th>
+		                <td mat-cell *matCellDef="let element"> {{element.diagnosisDate | date}} </td>
+		                <td mat-footer-cell *matFooterCellDef></td>
+		            </ng-container> 		                             -->
+		            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+		        </table>
+	    	</div>
+	</div>
+</div>	    

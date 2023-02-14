@@ -1,0 +1,14 @@
+<div>
+    <div>
+        <!-- <p> -->
+            <h5 style="color: #8c8e90">{{data}}</h5>
+        <!-- </p> -->
+        <p>
+            <!-- Status: {{data.status}} -->
+        </p>
+    </div>
+	<div mat-dialog-actions style="text-align: center;">
+		  <!-- <button mat-button [mat-dialog-close]="data.id" tabindex="2">No</button> -->
+		  <button mat-button (click)="logOut()" tabindex="-1" style="float: right; margin-right: 180px">OK</button>
+	</div>    
+</div>

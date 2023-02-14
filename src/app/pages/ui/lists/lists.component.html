@@ -1,0 +1,178 @@
+<div fxLayout="column">
+    <div class="flex-p">
+            <div fxLayout="column" class="mat-elevation-z8"> 
+                <table cellspacing="0" class="w-100">
+                    <tr>
+                        <td>                                                
+                            <mat-form-field class="w-100">
+                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                            </mat-form-field> 
+                        </td>
+                        <td>
+                        <button style="margin-bottom:2.5px; background-color: #54e87c; float: right;  width: 80px;" mat-raised-button color="accent" (click)="printToPdf('tablePrint')"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+                        <button style="float: right; max-width: 150px; background-color:#b3cefa" mat-raised-button (click)="ExportTOExcel()"><i class="fa fa-download" aria-hidden="true"></i> Excel</button>                      
+                        </td>
+                    </tr>
+                </table>
+            </div>  
+            <div class="example-container mat-elevation-z8" id="tablePrint" #TABLE>              
+            <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">       
+                <ng-container matColumnDef="No">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                </ng-container>         
+                <ng-container matColumnDef="Doctor Name">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Doctor Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.doctorName}} </td>
+                </ng-container>     
+                <ng-container matColumnDef="Department">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Department </th>
+                    <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+                </ng-container>        
+                <ng-container matColumnDef="Day">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Day </th>
+                    <td mat-cell *matCellDef="let element"> {{element.day}} </td>
+                </ng-container>
+                <ng-container matColumnDef="From Time">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> From Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fromTime}} </td>
+                </ng-container>
+                <ng-container matColumnDef="To Time">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> To Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.toTime}} </td>
+                </ng-container> 
+                <ng-container matColumnDef="Action">
+                        <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <a routerLink="/master/doctor-schedule/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                            <mat-icon class="icon-lg">edit</mat-icon>
+                            </a>
+                            <a  mat-icon-button>
+                            <mat-icon (click)="deleteDoctorSchedule(element._id)" class="icon-lg">delete_forever</mat-icon>
+                            </a>
+                        </td>
+                </ng-container>                                                            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            </div>
+            <mat-paginator #paginator (page)="handlePage($event)" [showFirstLastButtons]="true" [pageSize]="pageSize" [length]="totalSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
+
+
+<!-- <div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Basic list</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>Item 1</mat-list-item>
+                    <mat-list-item>Item 2</mat-list-item>
+                    <mat-list-item>Item 3</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Navigation lists</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-nav-list>
+                    <mat-list-item *ngFor="let link of [1,2,3]">
+                        <a matLine href="javascript:void(0)">Link {{ link }}</a>
+                        <button mat-icon-button>
+                            <mat-icon>info</mat-icon>
+                        </button>
+                    </mat-list-item>
+                </mat-nav-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Selection lists</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-selection-list #shoes>
+                    <mat-list-option *ngFor="let option of [1,2,3,4]">
+                      option {{option}}
+                    </mat-list-option>
+                </mat-selection-list>
+                <p>Options selected: {{shoes.selectedOptions.selected.length}}</p>
+            </mat-card-content>
+        </mat-card>
+    </div>  
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Multi-line lists</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <h4>Two line list</h4>
+                <mat-divider></mat-divider>
+                <mat-list>
+                    <mat-list-item>
+                        <h3 matLine> Line 1 </h3>
+                        <p matLine>
+                          <span> Line 2 </span>
+                          <small> -- content </small>
+                        </p>
+                    </mat-list-item>
+                </mat-list>                
+                <h4>Three line list</h4>
+                <mat-divider></mat-divider>
+                <mat-list>
+                    <mat-list-item>
+                        <h3 matLine> Line 1 </h3>
+                        <p matLine> Line 2 </p>
+                        <p matLine> Line 3 </p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Lists with icons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let number of [1,2,3]">
+                        <mat-icon matListIcon>folder</mat-icon>
+                        <h3 matLine> Title {{number}} </h3>
+                        <p matLine>
+                            <span> subject {{number}} </span>
+                            <small> -- content {{number}} </small>
+                        </p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>  
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Lists with avatars</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let number of [1,2,3]">
+                        <img matListAvatar [src]="'assets/img/avatars/avatar-'+number+'.png'" alt="image">
+                        <h3 matLine> Title {{number}} </h3>
+                        <p matLine>
+                            <span> subject {{number}} </span>
+                            <small> -- content {{number}} </small>
+                        </p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>               
+</div> -->

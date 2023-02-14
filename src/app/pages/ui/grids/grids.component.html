@@ -1,0 +1,102 @@
+<div fxLayout="column">
+    <div class="flex-p">
+            <div fxLayout="column" class="mat-elevation-z8"> 
+                    <mat-card-content>
+                        <button style="float: left; max-width: 150px;" mat-raised-button routerLink="/master/add-ipd-patient" color="primary">Add New IPD Patient</button>
+                        <button style="float: right;; max-width: 150px;" mat-raised-button color="accent">Export In Excel</button>
+                    </mat-card-content>                          
+                    <mat-form-field class="w-100">
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                    </mat-form-field> 
+                </div>         
+        <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">       
+            <ng-container matColumnDef="No">
+                <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+            </ng-container> 
+                <ng-container matColumnDef="Image">
+                    <mat-header-cell *matHeaderCellDef> Image </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                    <img matListAvatar [src]="element.img" alt="Dr-img">
+                    </mat-cell>
+                </ng-container>                     
+            <ng-container matColumnDef="Name">
+                <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>     
+            <ng-container matColumnDef="Gender">
+                <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.gender}} </mat-cell>
+            </ng-container>        
+            <ng-container matColumnDef="DOB">
+                <mat-header-cell *matHeaderCellDef> DOB </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.dob | date}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Mobile">
+                <mat-header-cell *matHeaderCellDef> MObile No. </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.mobileNo1}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="City">
+                <mat-header-cell *matHeaderCellDef> City </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
+            </ng-container> 
+            <ng-container matColumnDef="State">
+                <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.state}} </mat-cell>
+            </ng-container> 
+            <ng-container matColumnDef="PinCode">
+                <mat-header-cell *matHeaderCellDef> Pin Code </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.pinCode}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <a routerLink="/master/ipd-patient/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                    <mat-icon class="icon-lg">edit</mat-icon>
+                    </a>
+                    <a (click)="dialogComponent.openDialog(element._id,'IPD Patient')" mat-icon-button>
+                    <mat-icon (click)="getAllOpdPatient()" class="icon-lg">delete_forever</mat-icon>
+                    </a>
+                </mat-cell>
+            </ng-container>                                                            
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    </div>
+</div>
+
+
+<!-- <div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-subtitle><h2>Basic grid-list</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-grid-list cols="3" rowHeight="2:1">
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 1</mat-grid-tile>
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 2</mat-grid-tile>
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 3</mat-grid-tile>
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 4</mat-grid-tile>
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 5</mat-grid-tile>
+                    <mat-grid-tile [style.background]="'lightgray'">Grid 6</mat-grid-tile>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">                
+                <mat-card-subtitle><h2>Dynamic grid-list</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-grid-list cols="4" rowHeight="100px">
+                    <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows" [style.background]="tile.color">
+                        {{tile.text}}
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </div>    
+</div> -->

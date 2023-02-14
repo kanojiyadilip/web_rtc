@@ -1,0 +1,25 @@
+@mixin md-icon-size($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+  }
+  
+  .mat-icon {
+    @include md-icon-size(22px);
+  }
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  overflow: auto;
+}
+
+
+
+img{
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+}

@@ -1,0 +1,726 @@
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center center">               
+            </mat-card-header>
+            <mat-card-content>
+                <mat-tab-group>
+                    <mat-tab label="About Patient">
+                        
+
+            <mat-card-content style="margin-top: 20px">
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Patient Name" [(ngModel)]="data.name" formControlName="name" readonly>
+                                    <mat-error *ngIf="!form.controls.name.valid">Patient name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <input matInput [matDatepicker]="picker1" placeholder="Date Of Birth" [(ngModel)]="data.dob" formControlName="dob" readonly>
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Treatment Name" [(ngModel)]="data.treatment" formControlName="treatment">
+                                    <mat-error *ngIf="!form.controls.treatment.valid">treatment name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Reference" [(ngModel)]="data.referenceBy" formControlName="referenceBy">
+                                    <mat-error *ngIf="!form.controls.referenceBy.valid">reference is required</mat-error>
+                                </mat-form-field>  
+                            </td> 
+                        </tr>
+                    </table>                    
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+<!--                             <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Blood Group" [(ngModel)]="data.bloodGroup" formControlName="bloodGroup">
+                                        <mat-option *ngFor="let topping of bloodGroupList" [value]="topping">{{topping}}</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bloodGroup.valid">required a degree</mat-error>
+                                </mat-form-field>
+                            </td> -->
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="weight" [(ngModel)]="data.weight" formControlName="weight">
+                                    <mat-error *ngIf="!form.controls.weight.valid">weight is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="height" [(ngModel)]="data.height" formControlName="height">
+                                    <mat-error *ngIf="!form.controls.height.valid">height is required</mat-error>
+                                </mat-form-field>
+                            </td>                              
+                        </tr>
+                    </table> 
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="Patient Status" (selectionChange)="selectStatus($event.value)" [(ngModel)]="data.patientStatus" formControlName="patientStatus">
+                                                <mat-option value="0" disable>-- Select Patient Status --</mat-option>
+                                                <mat-option *ngFor="let patientAllStatuss of patientAllStatus?.data" value={{patientAllStatuss.status}}>
+                                                    {{patientAllStatuss.status}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.patientStatus.valid">patient status is required</mat-error>
+                                </mat-form-field>  
+                           </td>                            
+                           <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Admit Date" autocomplete="off" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" [(ngModel)]="data.admitDate" formControlName= "admitDate" >   
+                                    <owl-date-time #dt5></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.admitDate.valid">admit date is required</mat-error> 
+                                </mat-form-field>
+                            </td>                            
+                            <td  *ngIf="PS ==  'DISCHARGE' || PS ==  'DEATH'">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Discharge Date" autocomplete="off"  [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6" [(ngModel)]="data.dischargeDate" formControlName="dischargeDate" >   
+                                    <owl-date-time #dt6></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.dischargeDate.valid">discharge date is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>                            
+                            <td> 
+                                <mat-form-field class="w-100">
+                                    <textarea matInput placeholder="Remark" [(ngModel)]="data.remark" formControlName="remark"></textarea>
+                                    <mat-error *ngIf="!form.controls.remark.valid">remark is required</mat-error>
+                                </mat-form-field>                                
+                            </td>                              
+                        </tr>
+                    </table>        
+                    <!-- <table cellspacing="0" class="w-100"> -->
+<!--                         <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="Patient Status" (selectionChange)="selectStatus($event.value)" [(ngModel)]="data.patientStatus" formControlName="patientStatus">
+                                                <mat-option value="0" disable>-- Select Patient Status --</mat-option>
+                                                <mat-option *ngFor="let patientAllStatuss of patientAllStatus?.data" value={{patientAllStatuss.status}}>
+                                                    {{patientAllStatuss.status}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.patientStatus.valid">patient status is required</mat-error>
+                                </mat-form-field>  
+                            </td>                              
+                        </tr> -->
+                    <!-- </table>             -->
+                    <button style="margin-top: 10px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+
+
+                    </mat-tab>
+                    <mat-tab label="Patient Bed">
+
+                    <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+                        <div fxLayout="row">
+                            <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">            
+                                <mat-button-toggle value="add" (click)="openDialog()">
+                                    <mat-icon>add</mat-icon>
+                                </mat-button-toggle>
+                                <!-- <mat-button-toggle value="search">
+                                    <mat-icon>search</mat-icon>
+                                </mat-button-toggle> -->           
+                            </mat-button-toggle-group>            
+                        </div>
+                        <form class="user-search" [class.show]="controls.value == 'search'">
+                            <mat-form-field class="user-search-input">
+                                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                            </mat-form-field>
+                        </form>
+                    <!--     <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy">            
+                                <mat-button-toggle value="grid" checked="true">
+                                    <mat-icon>view_module</mat-icon>
+                                </mat-button-toggle>
+                                <mat-button-toggle value="list">
+                                    <mat-icon>view_list</mat-icon>
+                                </mat-button-toggle>           
+                            </mat-button-toggle-group>
+                        </div> -->
+                    </div>
+
+
+                        <div fxLayout="column">
+                            <div class="flex-p">
+                                <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">       
+                                    <ng-container matColumnDef="No">
+                                        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                                        <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+                                    </ng-container>                    
+                                    <ng-container matColumnDef="bedCategoryName">
+                                        <mat-header-cell *matHeaderCellDef> Category Name </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">{{element.bedCategoryName}}</mat-cell>
+                                    </ng-container>     
+                                    <ng-container matColumnDef="bedNo">
+                                        <mat-header-cell *matHeaderCellDef> Bed No </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.bedNo}} </mat-cell>
+                                    </ng-container>        
+                                    <ng-container matColumnDef="inDate">
+                                        <mat-header-cell *matHeaderCellDef> In Date </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.inDate | date}} </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="outDate">
+                                        <mat-header-cell *matHeaderCellDef> Discharge Date </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.outDate | date}} </mat-cell>
+                                    </ng-container> 
+                                        <ng-container matColumnDef="perDayPrice">
+                                            <mat-header-cell *matHeaderCellDef> Per Day Price </mat-header-cell>
+                                            <mat-cell *matCellDef="let element">{{element.perDayPrice}}
+                                            </mat-cell>
+                                        </ng-container>                         
+                                    <ng-container matColumnDef="Action">
+                                        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"><!-- 
+                                            <a routerLink="/form-controls/admit-patient/{{element.patientAdmissionId}}" [routerLinkActive]="['link-active']" mat-icon-button> -->
+                                            <mat-icon (click)="bedUpdateDialog(element._id, 'no')" class="icon-lg">edit</mat-icon>
+                                            <!-- </a> -->
+                                            <a mat-icon-button>
+                                            <mat-icon (click)="bedUpdateDialog(element._id, 'delete')" class="icon-lg">delete_forever</mat-icon>
+                                            </a>
+                                        </mat-cell>
+                                    </ng-container>                                                            
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                            </div>
+                        </div>                  
+                    </mat-tab>
+
+                    <mat-tab label="Patient Operation">
+                   <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+                        <div fxLayout="row">
+                            <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">            
+                                <mat-button-toggle value="add" (click)="openDialogOperation()">
+                                    <mat-icon>add</mat-icon>
+                                </mat-button-toggle>
+                                <!-- <mat-button-toggle value="search">
+                                    <mat-icon>search</mat-icon>
+                                </mat-button-toggle> -->           
+                            </mat-button-toggle-group>            
+                        </div>
+                        <form class="user-search" [class.show]="controls.value == 'search'">
+                            <mat-form-field class="user-search-input">
+                                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                        <div fxLayout="column">
+                            <div class="flex-p">
+                                <mat-table #table [dataSource]="dataSource2" class="mat-elevation-z8">       
+                                    <ng-container matColumnDef="No">
+                                        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                                        <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+                                    </ng-container>                    
+                                    <ng-container matColumnDef="Operation Name">
+                                        <mat-header-cell *matHeaderCellDef> Operation Name </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">{{element.operationName}}</mat-cell>
+                                    </ng-container>     
+                                    <ng-container matColumnDef="Operation Charge">
+                                        <mat-header-cell *matHeaderCellDef> Operation Charge </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.operationCharges}} </mat-cell>
+                                    </ng-container>        
+                                    <ng-container matColumnDef="Operation Date">
+                                        <mat-header-cell *matHeaderCellDef> Operation Date </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.operationDate | date}} </mat-cell>
+                                    </ng-container>
+                                        <ng-container matColumnDef="Doctor Name">
+                                            <mat-header-cell *matHeaderCellDef> Doctor Name </mat-header-cell>
+                                            <mat-cell *matCellDef="let element">{{element.doctorName}}
+                                            </mat-cell>
+                                        </ng-container>                         
+                                    <ng-container matColumnDef="Action">
+                                        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <mat-icon (click)="openDialogOperationUpdate(element._id, 'no')" class="icon-lg">edit</mat-icon>
+                                            <a mat-icon-button>
+                                            <mat-icon (click)="openDialogOperationUpdate(element._id, 'delete')" class="icon-lg">delete_forever</mat-icon>
+                                            </a>
+                                        </mat-cell>
+                                    </ng-container>                                                            
+                                    <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Patient Diagnosis">
+                       <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+                            <div fxLayout="row">
+                                <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">            
+                                    <mat-button-toggle value="add" (click)="openDialogDiagnosis()">
+                                        <mat-icon>add</mat-icon>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="search">
+                                        <mat-icon>search</mat-icon>
+                                    </mat-button-toggle>           
+                                </mat-button-toggle-group>            
+                            </div>
+                            <form class="user-search" [class.show]="controls.value == 'search'">
+                                <mat-form-field class="user-search-input">
+                                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                                </mat-form-field>
+                            </form>
+                        </div>
+                            <div fxLayout="column">
+                                <div class="flex-p">
+                                    <mat-table #table [dataSource]="dataSource3" class="mat-elevation-z8">       
+                                        <ng-container matColumnDef="No">
+                                            <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                                            <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+                                        </ng-container>                    
+                                        <ng-container matColumnDef="Diagnosis Name">
+                                            <mat-header-cell *matHeaderCellDef> Diagnosis Name </mat-header-cell>
+                                            <mat-cell *matCellDef="let element">{{element.diagnosisName}}</mat-cell>
+                                        </ng-container>     
+                                        <ng-container matColumnDef="Diagnosis Charge">
+                                            <mat-header-cell *matHeaderCellDef> Diagnosis Charge </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.diagnosisPrice}} </mat-cell>
+                                        </ng-container> 
+                                            <ng-container matColumnDef="Doctor Name">
+                                                <mat-header-cell *matHeaderCellDef> Doctor Name </mat-header-cell>
+                                                <mat-cell *matCellDef="let element">{{element.doctorName}}
+                                                </mat-cell>
+                                            </ng-container>                         
+                                        <ng-container matColumnDef="Action">
+                                            <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                                            <mat-cell *matCellDef="let element">
+                                                <mat-icon (click)="openDialogDiagnosisUpdate(element._id, 'no')" class="icon-lg">edit</mat-icon>
+                                                <a mat-icon-button>
+                                                <mat-icon (click)="openDialogDiagnosisUpdate(element._id, 'delete')" class="icon-lg">delete_forever</mat-icon>
+                                                </a>
+                                            </mat-cell>
+                                        </ng-container>                                                            
+                                        <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
+                                        <mat-row *matRowDef="let row; columns: displayedColumns3;"></mat-row>
+                                    </mat-table>
+                                    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                                </div>
+                            </div>                        
+                    </mat-tab>
+
+                    <mat-tab label="Doctor Visit">
+                   <div fxLayout="row" fxLayoutAlign="space-between center" class="flex-p">
+                        <div fxLayout="row">
+                            <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">            
+                                <mat-button-toggle value="add" (click)="openDialogDoctorVisit()">
+                                    <mat-icon>add</mat-icon>
+                                </mat-button-toggle>
+                                <!-- <mat-button-toggle value="search">
+                                    <mat-icon>search</mat-icon>
+                                </mat-button-toggle> -->           
+                            </mat-button-toggle-group>            
+                        </div>
+                        <form class="user-search" [class.show]="controls.value == 'search'">
+                            <mat-form-field class="user-search-input">
+                                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                            </mat-form-field>
+                        </form>
+                    </div>
+                        <div fxLayout="column">
+                            <div class="flex-p">
+                                <mat-table #table [dataSource]="dataSource4" class="mat-elevation-z8">       
+                                    <ng-container matColumnDef="No">
+                                        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                                        <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+                                    </ng-container>                    
+                                    <ng-container matColumnDef="Doctor Name">
+                                        <mat-header-cell *matHeaderCellDef> Doctor Name </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">{{element.doctorName}}
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Visit Charge">
+                                        <mat-header-cell *matHeaderCellDef> IPD Visit Charge </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">{{element.doctorVisitPrice}}</mat-cell>
+                                    </ng-container>     
+                                    <ng-container matColumnDef="Visit Date">
+                                        <mat-header-cell *matHeaderCellDef> Visit Date</mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.visitDate | date}} </mat-cell>
+                                    </ng-container>                                                              
+                                    <ng-container matColumnDef="Action">
+                                        <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <mat-icon (click)="openDialogDoctorVisitPatientUpdate(element._id, 'no')" class="icon-lg">edit</mat-icon>
+                                            <a mat-icon-button>
+                                            <mat-icon (click)="openDialogDoctorVisitPatientUpdate(element._id, 'delete')" class="icon-lg">delete_forever</mat-icon>
+                                            </a>
+                                        </mat-cell>
+                                    </ng-container>                                                            
+                                    <mat-header-row *matHeaderRowDef="displayedColumns4"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns4;"></mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+                            </div>
+                        </div>                          
+                    </mat-tab>
+
+                    <mat-tab label="Patient Invoice">    
+                    <div id="invoice">
+                          <section id="memo">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <!-- <div class="logo">
+                                          <div style="width:150px; height: 100px;"><img [src]="hospitalD2.logo" id="ext-gen98" style="display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; margin: 0px auto;"></div>
+                                        </div> -->
+                                    </td>
+                                    <td>    
+                                        <div class="logo">
+                                          <div style="width:200px; height: 50px;"><img [src]="hospitalD2.logo" id="ext-gen98" style="display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; margin: 0px auto;"></div>
+                                        </div>                                        
+                                        <div class="company-info">
+                                          <div><b>{{hospitalD2.hospitalName | titlecase}}</b></div>
+                                          <div>{{hospitalD2.address | titlecase}}</div>
+                                          <div>{{hospitalD2.city | titlecase}}, {{hospitalD2.state | titlecase}} - {{hospitalD2.pinCode}} </div>
+                                          <div>Phone : {{hospitalD2.telephoneNo}}, {{hospitalD2.mobileNo}}  </div>
+                                          <!-- <div>http://dinostore.bed; hello@dinostore.bed</div> -->
+                                        </div>
+                                    </td>
+                    <!--                 <td width="100%">    
+                                        <div class="payment-info"  style="float: right;">
+                                          <div>Patient Name:</div>
+                                          <div>Gravelpit</div>
+                                          <div>Acc: 200-78005-444</div>
+                                          <div></div>
+                                          <div></div>
+                                        </div>
+                                    </td>  -->   
+                                </tr>
+                            </table>
+                            <div class="payment-info"  style="float: right;">
+                            <table>
+                                  <tr>
+                                    <td>    
+                                      <b>Name:</b>
+                                    </td>
+                                    <td>
+                                      {{dataInv.name}}
+                                    </td> 
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <b>Gender:</b>
+                                    </td> 
+                                    <td>
+                                       {{dataInv.gender}}
+                                    </td> 
+                                  </tr> 
+                                  <tr>
+                                  <td> 
+                                      <b> DOB </b>
+                                    </td>
+                                    <td>
+                                      {{dataInv.dob | date}}
+                                    </td>
+                                  </tr>  
+                                  <tr>
+                                    <td>
+                                      <b>Admit Date: </b>
+                                    </td>
+                                    <td>
+                                      {{dataInv.admitDate | date:'medium'}}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <b>Discharge Date: </b>
+                                    </td>
+                                    <td *ngIf="dataInv.dischargeDate != null;">
+                                      {{dataInv.dischargeDate | date:'medium'}}
+                                    </td>
+                                    <td *ngIf="dataInv.dischargeDate == null;">
+                                      <p>Date is not given</p>
+                                    </td>                                    
+                                  </tr>                                  
+                                  <tr>
+                                    <td>
+                                        <b>Address:</b>
+                                    </td>
+                                    <td>
+                                      {{dataInv.address | lowercase }}<div>{{dataInv.city | lowercase }}, {{dataInv.state | lowercase }} - {{dataInv.pinCode}}</div>
+                                    </td>
+                                  </tr>
+                                  <!-- <tr>
+                                    <td><b>Pin Code:</b></td>
+                                    <td>{{dataInv.pinCode}}</td>
+                                  </tr> --> 
+                            </table>
+                            </div>
+                          </section>
+                          
+                          <div class="clearfix"></div>
+                          
+                          
+                          <div class="clearfix"></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                          <section id="items">
+                     
+                           <div style="float: left; margin-top:10px">
+                            <span><b>Bill No:</b> {{ dataInv.patientTokenInvNo }}</span>
+                          </div>       
+                            <table bgcolor="#ffffff" border="1" width="100%" cellspacing="0" cellpadding="0" style="margin-right: 20px;">
+                            <!-- <b>Bill No: {{ dataInv.patientTokenInvNo }}</b> -->
+                              <tbody><tr>
+                                <th width="60" style="background-color: #adadad;">Sr.</th>
+                                <th style="background-color: #adadad;">Service</th>
+                                <th style="background-color: #adadad;">Charges</th>
+                              </tr>
+                              <!-- invData -->
+                              <tr *ngFor="let invDatas of invData; let i=index">
+                                <!--  style="border: none; border-right: solid 1px #000000" -->
+                                <td align="center">{{i + 1}}</td> 
+                                <td align="center">{{ invDatas.service }}</td>
+                                <td align="center">₹ {{ invDatas.chargase }}</td>
+                              </tr>
+                              <tr>
+                                <td align="center">&nbsp;</td> 
+                                <td align="center">&nbsp;</td>
+                                <td align="center">&nbsp;</td>
+                              </tr> 
+                              <tr>
+                                <td align="center">&nbsp;</td> 
+                                <td align="center">&nbsp;</td>
+                                <td align="center">&nbsp;</td>
+                              </tr> 
+                              <tr>
+                                <td align="center">&nbsp;</td> 
+                                <td align="center">&nbsp;</td>
+                                <td align="center">&nbsp;</td>
+                              </tr>
+                              <tr>
+                                <td align="center">&nbsp;</td> 
+                                <td align="center">&nbsp;</td>
+                                <td align="center">&nbsp;</td>
+                              </tr> 
+                              <tr>
+                                <td align="center">&nbsp;</td> 
+                                <td align="center">&nbsp;</td>
+                                <td align="center">&nbsp;</td>
+                              </tr>                                                                                                             
+                            </tbody></table>
+                            
+                          </section>
+                          
+                          <section id="sums">
+                          
+                            <table  width="100%" cellpadding="0" cellspacing="0" style="float: right;">
+                              <tbody>
+<!--                               <tr>
+                                <th>Subtotal:</th>
+                                <td>₹ 0.00</td>
+                              </tr> -->
+                              <tr>
+                                <th>In Word:</th>
+                                <td>
+                                    <p style="color: red">
+                                        {{inWord | uppercase}}. <!-- RUPEES ONLY. -->
+                                    </p>
+                                </td>
+                                <th>TOTAL:</th>
+                                <td><p style="color: red">₹ {{dataInv.totalAmount}}</p></td>
+                              </tr>
+                              
+                              <!-- You can use attribute data-hide-on-quote="true" to hide specific information on quotes.
+                                   For example Invoicebus doesn't need amount paid and amount due on quotes  -->
+<!--                               <tr>
+                                <th>Paid:</th>
+                                <td>₹ 0.00</td>
+                              </tr>
+                              
+                              <tr>
+                                <th>Amount Due:</th>
+                                <td>₹ 0.00</td>
+                              </tr> -->
+                              
+                            </tbody></table>
+                            
+                          </section>
+                          
+                          <div class="clearfix"></div>
+                          
+                          <section id="terms">
+                          
+                    <!--         <span data-ibcl-id="terms_label" class=" ibcl_terms_label">Terms &amp; Notes</span>
+                            <div data-ibcl-id="terms" class=" ibcl_terms">Thank you very much.<br>We really appreciate your business.<br>Please send payment within 15 days of receiving this invoice.</div> -->
+                            
+                          </section>
+                        </div>
+                        <div style="text-align: center">
+                            <button mat-button (click)="print('invoice')"><mat-icon>print</mat-icon> CliCK to Print </button>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Patient Basic Details"> 
+
+
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">                
+                <mat-card-subtitle><h6>IPD Patient Basic Detail</h6></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+               <form [formGroup]="formUpdate" (ngSubmit)="onSubmitUpdate(formUpdate.value)" fxLayout="column" fxLayoutAlign="center">
+
+                    <mat-form-field>
+                        <input matInput placeholder="Patient Name" [(ngModel)]="dataPBD.name" formControlName="name">
+                        <mat-error *ngIf="!formUpdate.controls.name.valid">Patient name is required</mat-error>                    
+                    </mat-form-field>
+
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="Gender" [(ngModel)]="dataPBD.gender" formControlName="gender">
+                                                <mat-option value="MALE">MALE</mat-option>
+                                                <mat-option value="FEMALE">FEMALE</mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!formUpdate.controls.gender.valid">gender is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <input matInput [matDatepicker]="picker01" [(ngModel)]="dataPBD.dob" placeholder="Date Of Birth" formControlName="dob">
+                                        <mat-datepicker-toggle matSuffix [for]="picker01"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker01></mat-datepicker>
+                                        <mat-error *ngIf="!formUpdate.controls.dob.valid">Patient name is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Mobile Number" [(ngModel)]="dataPBD.mobileNo1" formControlName="mobileNo1">
+                                        <mat-error *ngIf="!formUpdate.controls.mobileNo1.valid">required a valid 10 digit of mobile number</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Mobile Number (Optional)" [(ngModel)]="dataPBD.mobileNo2" formControlName="mobileNo2">
+                                        <mat-error *ngIf="!formUpdate.controls.mobileNo2.valid">required a valid 10 digit of mobile number</mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Relative Name" [(ngModel)]="dataPBD.relativeName" formControlName="relativeName">
+                                        <mat-error *ngIf="!formUpdate.controls.relativeName.valid">relative name is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Relative Number" [(ngModel)]="dataPBD.relativeNumber" formControlName="relativeNumber">
+                                        <mat-error *ngIf="!formUpdate.controls.relativeNumber.valid">relative mobile number required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                    </table>
+                    <mat-form-field class="w-100">
+                        <textarea matInput placeholder="Address" [(ngModel)]="dataPBD.address" formControlName="address"></textarea>
+                        <mat-error *ngIf="!formUpdate.controls.address.valid">address is required</mat-error>
+                    </mat-form-field>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select (selectionChange)="selectCity($event.value)" [(ngModel)]="dataPBD.state" placeholder="State" formControlName="state">
+                                                <mat-option>-- Select State --</mat-option>
+                                                <mat-option *ngFor="let stateDatas of stateData?.data" value={{stateDatas.state}}>
+                                                    {{stateDatas.state}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!formUpdate.controls.state.valid">state is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="City" [(ngModel)]="dataPBD.city" formControlName="city">
+                                                <mat-option>-- Select City --</mat-option>
+                                                <mat-option *ngFor="let cityDatas of cityData?.data" value={{cityDatas.city_name}}>
+                                                    {{cityDatas.city_name}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!formUpdate.controls.city.valid">city is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput  placeholder="Pin Code" [(ngModel)]="dataPBD.pinCode" formControlName="pinCode">
+                                    <mat-error *ngIf="!formUpdate.controls.pinCode.valid">required a valid 6 digit of Pin Code</mat-error>
+                                    <!-- <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint> -->
+                                </mat-form-field>
+                            </td>                            
+                        </tr>
+                        <tr>
+                        </tr>                           
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Blood Group" [(ngModel)]="dataPBD.bloodGroup" formControlName="bloodGroup">
+                                        <mat-option *ngFor="let topping of bloodGroupList" [value]="topping">{{topping}}</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!formUpdate.controls.bloodGroup.valid">required a degree</mat-error>
+                                </mat-form-field>
+                            </td> 
+                            <td>
+                                <input style="margin-left: 20px" type="file" (change)="changeListener($event)">
+                            </td>                                                        
+                        </tr>
+                    </table>          
+                    <button style="margin-top: 10px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </mat-tab>                    
+                </mat-tab-group>
+            </mat-card-content>
+        </mat-card>
+    </div>     
+</div>

@@ -1,0 +1,121 @@
+
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">                
+                <mat-card-subtitle><h4>Patient Appointment</h4></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                    <table cellspacing="0" class="w-100">
+                        <tr>                
+                            <td>
+                                <h5>Token No: {{data.tokenNo}}</h5>
+                            </td>  
+                        </tr>
+                    </table>                      
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Patient Name" [(ngModel)]="data.opdPatientName" formControlName="name" readonly>
+                                    <mat-error *ngIf="!form.controls.name.valid">Patient name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <input matInput [matDatepicker]="picker1" placeholder="DOB" [(ngModel)]="data.dob" formControlName="dob" readonly>
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select (selectionChange)="select($event.value)" placeholder="Department"   [(ngModel)]="data.department" formControlName="department" required>
+                                                <mat-option>-- Select Department --</mat-option>
+                                                <mat-option *ngFor="let docDecps of docDecp?.data" value={{docDecps.departmentName}}>
+                                                    {{docDecps.departmentName}}
+                                                </mat-option>
+                                        </mat-select> 
+                                    <mat-error *ngIf="!form.controls.department.valid">department name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select (selectionChange)="doctorSelect($event.value)" placeholder="Doctor"   [(ngModel)]="data.doctorId" formControlName="doctorId" required>
+                                        <mat-option value="0">-- Select Doctor --</mat-option>
+                                        <mat-option *ngFor="let doctorLists of doctorList?.data" value={{doctorLists._id}}>
+                                            {{doctorLists.name}}
+                                        </mat-option>
+                                    </mat-select> 
+                                    <mat-error *ngIf="!form.controls.doctorId.valid">doctor name is required</mat-error>
+                                 </mat-form-field>   
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Doctor Charges in ₹" formControlName="doctorCharges" [(ngModel)]="docChargase" required>
+                                        <mat-option>-- Select Doctor Charges--</mat-option>
+                                        <mat-option value={{doctorCharges1}}>{{doctorCharges1}}</mat-option>
+                                        <mat-option value={{doctorCharges2}}>{{doctorCharges2}}</mat-option>
+                                        <mat-option value={{doctorCharges3}}>{{doctorCharges3}}</mat-option>
+                                    </mat-select> 
+                                    <mat-error *ngIf="!form.controls.doctorCharges.valid">doctor charges is required</mat-error>
+                                 </mat-form-field>   
+                            </td>                            
+<!--                             <td> 
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Doctor Charges" [(ngModel)]="doctorCharges" formControlName="opdCharge" readonly>
+                                    <mat-error *ngIf="!form.controls.name.valid">doctor charges is required</mat-error>
+                                </mat-form-field>                                
+                            </td>  -->   
+                        </tr>
+                    </table>                    
+
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                           <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Other Charges" autocomplete="off" [(ngModel)]="data.otherCharges"  formControlName= "otherCharges"> 
+                                    <mat-error *ngIf="!form.controls.otherCharges.valid">required a valid other charges</mat-error> 
+                                </mat-form-field>
+                            </td>                            
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Appointment Date" autocomplete="off" [(ngModel)]="data.opdScheduleUpdate" [min]="min" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" formControlName= "opdSchedule">   
+                                    <owl-date-time #dt5></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.opdSchedule.valid">appointment date is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Reference By" autocomplete="off" [(ngModel)]="data.referenceBy" formControlName= "referenceBy"> 
+                                    <mat-error *ngIf="!form.controls.referenceBy.valid">reference name is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Appointment Status" formControlName="appointmentStatus" [(ngModel)]="data.appointmentStatus" required>
+                                        <mat-option>-- Select Appointment Status--</mat-option>
+                                        <mat-option value="PENDING">PEDNING</mat-option>
+                                        <mat-option value="CANCEL">CANCEL</mat-option>
+                                        <mat-option value="PAID">PAID</mat-option>
+                                    </mat-select> 
+                                    <mat-error *ngIf="!form.controls.appointmentStatus.valid">Appointment Status charges is required</mat-error>
+                                 </mat-form-field>   
+                            </td>   
+                        </tr>
+                    </table>                    
+                    <button style="margin-top: 10px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

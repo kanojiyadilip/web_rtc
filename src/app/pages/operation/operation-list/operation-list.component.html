@@ -1,0 +1,53 @@
+<div fxLayout="column">
+        <div class="flex-p">
+                <div fxLayout="column" class="mat-elevation-z8"> 
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>                                                
+                                <mat-form-field class="w-100">
+                                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                                </mat-form-field> 
+                            </td>
+                            <td>
+                            <button style="margin-bottom:2.5px; background-color: #54e87c; float: right;  width: 80px;" mat-raised-button color="accent" (click)="printToPdf('tablePrint')"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+                            <button style="float: right; max-width: 150px; background-color:#b3cefa" mat-raised-button (click)="ExportTOExcel()"><i class="fa fa-download" aria-hidden="true"></i> Excel</button>                      
+                            </td>
+                        </tr>
+                    </table>
+                </div>   
+                <div class="example-container mat-elevation-z8" id="tablePrint" #TABLE>      
+                    <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">   
+                        <ng-container matColumnDef="No">
+                            <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> No </th>
+                            <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                        </ng-container>                                       
+                        <ng-container matColumnDef="operationName">
+                            <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.operationName}} </td>
+                        </ng-container>  
+                        <ng-container matColumnDef="abbreviation">
+                            <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Abbreviation </th>
+                            <td mat-cell *matCellDef="let element"> {{element.abbreviation}} </td>
+                        </ng-container>                    
+                        <ng-container matColumnDef="operationCharges">
+                            <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Chargase </th>
+                            <td mat-cell *matCellDef="let element"> {{element.operationCharges}} </td>
+                        </ng-container>         
+                        <ng-container matColumnDef="Action">
+                                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a routerLink="/operation/update-operation/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                                    <mat-icon class="icon-lg">edit</mat-icon>
+                                    </a>
+                                    <a mat-icon-button>
+                                    <mat-icon (click)="deleteOperation(element._id)" class="icon-lg">delete_forever</mat-icon>
+                                    </a>
+                                </td>
+                        </ng-container>                                                            
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            <mat-paginator #paginator (page)="handlePage($event)" [showFirstLastButtons]="true" [pageSize]="pageSize" [length]="totalSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+    </div>

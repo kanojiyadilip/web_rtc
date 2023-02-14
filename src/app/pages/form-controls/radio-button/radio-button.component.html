@@ -1,0 +1,369 @@
+<div fxLayout="column">
+    <div class="flex-p">
+            <div fxLayout="column" class="mat-elevation-z8">                          
+                    <mat-form-field class="w-100">
+                        <input matInput (input)="searchPatient($event)" placeholder="Enter IPD Patient Detail For Admission">
+                    </mat-form-field> 
+                </div> 
+        <div class="example-container mat-elevation-z8 " #TABLE>                
+        <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="SearchData == true">       
+            <ng-container matColumnDef="No">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+            </ng-container>         
+            <ng-container matColumnDef="Name">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>     
+            <ng-container matColumnDef="Gender">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Gender </th>
+                <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+            </ng-container>        
+            <ng-container matColumnDef="DOB">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> DOB </th>
+                <td mat-cell *matCellDef="let element"> {{element.dob | date}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Mobile">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> MObile No. </th>
+                <td mat-cell *matCellDef="let element"> {{element.mobileNo1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Mobile2">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef>(Sec) MObile No. </th>
+                <td mat-cell *matCellDef="let element"> {{element.mobileNo2}} </td>
+            </ng-container>            
+            <ng-container matColumnDef="PinCode">
+                <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Pin Code </th>
+                <td mat-cell *matCellDef="let element"> {{element.pinCode}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Take Admission">
+                    <th style="color:#ffffff" mat-header-cell *matHeaderCellDef> Take Admission </th>
+                    <td mat-cell *matCellDef="let element">
+<!--                         <a routerLink="/master/patient/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                        <mat-icon class="icon-lg">edit</mat-icon>
+                        </a> -->
+                        <a (click)="getPatientForAdmission(element)" mat-icon-button>
+                        <mat-icon class="icon-lg">receipt</mat-icon>
+                        </a>
+                    </td>
+            </ng-container>                                                            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+        <!-- <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></mat-paginator> -->
+
+
+
+<div fxLayout="column" *ngIf="patinetAppointFrom == true">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">                
+                <mat-card-subtitle><h4>IPD Patient Admission</h4></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+
+                    <mat-form-field>
+                        <input matInput placeholder="Patient Name" [(ngModel)]="data.name" formControlName="name">
+                        <mat-error *ngIf="!form.controls.name.valid">Patient name is required</mat-error>                    
+                    </mat-form-field>
+
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="Gender" [(ngModel)]="data.gender" formControlName="gender">
+                                                <mat-option value="MALE">MALE</mat-option>
+                                                <mat-option value="FEMALE">FEMALE</mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.gender.valid">gender is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <input matInput [matDatepicker]="picker1" [(ngModel)]="data.dob" placeholder="Date Of Birth" formControlName="dob">
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Mobile Number" [(ngModel)]="data.mobileNo1" formControlName="mobileNo1">
+                                        <mat-error *ngIf="!form.controls.mobileNo1.valid">required a valid 10 digit of mobile number</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Mobile Number (Optional)" [(ngModel)]="data.mobileNo2" formControlName="mobileNo2">
+                                        <mat-error *ngIf="!form.controls.mobileNo2.valid">required a valid 10 digit of mobile number</mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Relative Name" [(ngModel)]="data.relativeName" formControlName="relativeName">
+                                        <mat-error *ngIf="!form.controls.relativeName.valid">relative name is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput placeholder="Relative Number" [(ngModel)]="data.relativeNumber" formControlName="relativeNumber">
+                                        <mat-error *ngIf="!form.controls.relativeNumber.valid">relative mobile number required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                    </table>
+                    <mat-form-field class="w-100">
+                        <textarea matInput placeholder="Address" [(ngModel)]="data.address" formControlName="address">1600 Amphitheatre Pkwy</textarea>
+                        <mat-error *ngIf="!form.controls.address.valid">address is required</mat-error>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field class="w-100">
+                        <textarea matInput placeholder="Address 2"></textarea>
+                    </mat-form-field>                    -->
+
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select (selectionChange)="select($event.value)" [(ngModel)]="data.state" placeholder="State" formControlName="state">
+                                                <mat-option>-- Select State --</mat-option>
+                                                <mat-option *ngFor="let stateDatas of stateData?.data" value={{stateDatas.state}}>
+                                                    {{stateDatas.state}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.state.valid">state is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="City" [(ngModel)]="data.city" formControlName="city">
+                                                <mat-option>-- Select City --</mat-option>
+                                                <mat-option *ngFor="let cityDatas of cityData?.data" value={{cityDatas.city_name}}>
+                                                    {{cityDatas.city_name}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.city.valid">city is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput  placeholder="Pin Code" [(ngModel)]="data.pinCode" formControlName="pinCode">
+                                    <mat-error *ngIf="!form.controls.pinCode.valid">required a valid 6 digit of Pin Code</mat-error>
+                                    <!-- <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint> -->
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <input style="margin-left: 20px" type="file" (change)="changeListener($event)">
+                            </td>                            
+                        </tr>
+                        <tr>
+                        </tr>                           
+                    </table>
+
+                    <!-- <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Patient Name" [(ngModel)]="patientName" formControlName="name" readonly>
+                                    <mat-error *ngIf="!form.controls.name.valid">Patient name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <input matInput [matDatepicker]="picker1" placeholder="Date Of Birth" [(ngModel)]="patinetDob" formControlName="dob" readonly>
+                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>  -->
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <!-- <input matInput placeholder="Degree" formControlName="degree"> -->
+                                    <mat-select placeholder="Blood Group" [(ngModel)]="data.bloodGroup" formControlName="bloodGroup">
+                                        <mat-option *ngFor="let topping of bloodGroupList" [value]="topping">{{topping}}</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bloodGroup.valid">Blood group is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="weight" [(ngModel)]="weight" formControlName="weight">
+                                    <mat-error *ngIf="!form.controls.weight.valid">weight is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="height" [(ngModel)]="height" formControlName="height">
+                                    <mat-error *ngIf="!form.controls.height.valid">height is required</mat-error>
+                                </mat-form-field>
+                            </td>                              
+                        </tr>
+                    </table>     
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Treatment" [(ngModel)]="treatment" formControlName="treatment">
+                                    <mat-error *ngIf="!form.controls.treatment.valid">treatment name is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Reference" [(ngModel)]="referenceBy" formControlName="referenceBy">
+                                    <mat-error *ngIf="!form.controls.referenceBy.valid">reference is required</mat-error>
+                                </mat-form-field>  
+                            </td>                           
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Bed Category" (selectionChange)="getbed($event.value)" formControlName="bedCategoryId">
+                                        <mat-option>-- Select Bed Category --</mat-option>
+                                        <mat-option *ngFor="let allBedCs of allBedC?.data" value={{allBedCs._id}}>
+                                            {{allBedCs.categoryName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bedCategoryId.valid">Patient bed  category is required</mat-error>
+                                </mat-form-field>
+                            </td>                            
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Bed" formControlName="bedId">
+                                        <mat-option>-- Select Bed Category --</mat-option>
+                                        <mat-option *ngFor="let allBeds of allBed?.data" value={{allBeds._id}}>
+                                            {{allBeds.bedNo}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bedId.valid">Patient bed is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Per Day Price" [(ngModel)]="bedPrice" formControlName="perDayPrice">
+                                    <mat-error *ngIf="!form.controls.perDayPrice.valid">per day price is required</mat-error>
+                                </mat-form-field>
+                            </td>                            
+                        </tr>
+                    </table>                                                        
+
+ <!--                    <table cellspacing="0" class="w-100">
+                        <tr>
+                           <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Admit Date" autocomplete="off" [min]="min" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" formControlName= "admitDate" >   
+                                    <owl-date-time #dt5></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.admitDate.valid">admit date is required</mat-error> 
+                                </mat-form-field>
+                            </td>                            
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Discharge Date" autocomplete="off" [min]="min" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6" formControlName= "dischargeDate" >   
+                                    <owl-date-time #dt6></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.dischargeDate.valid">discharge date is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellspacing="0" class="w-100">
+                        <tr>                            
+                            <td> 
+                                <mat-form-field class="w-100">
+                                    <textarea matInput placeholder="Remark" formControlName="remark"></textarea>
+                                    <mat-error *ngIf="!form.controls.remark.valid">remark is required</mat-error>
+                                </mat-form-field>                                
+                            </td>                              
+                        </tr>
+                    </table>        
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                        <mat-select placeholder="Patient Status" formControlName="patientStatus">
+                                                <mat-option>-- Select Patient Status --</mat-option>
+                                                <mat-option *ngFor="let patientAllStatuss of patientAllStatus?.data" value={{patientAllStatuss.status}}>
+                                                    {{patientAllStatuss.status}}
+                                                </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="!form.controls.patientStatus.valid">patient status is required</mat-error>
+                                </mat-form-field>  
+                            </td>                              
+                        </tr>
+                    </table> -->            
+                    <button style="margin-top: 10px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+ 
+
+
+<div fxLayout="column" *ngIf="patinetNotFound == true">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">                
+                <mat-card-subtitle><h5>IPD Patient Not Found </h5></mat-card-subtitle>
+                <mat-card-subtitle>
+                    <a style="cursor: pointer;" (click)="newPatientAdmission(element)" [routerLinkActive]="['link-active']">Click here to add IPD Patient</a>
+                </mat-card-subtitle>     
+            </mat-card-header>    
+        </mat-card>
+    </div>
+</div>
+
+
+    </div>
+</div>
+        
+
+
+
+
+
+
+
+
+
+<!-- <div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Basic radios</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-radio-group>
+                    <mat-radio-button value="1" class="mx-1">Option 1</mat-radio-button>
+                    <mat-radio-button value="2" class="mx-1">Option 2</mat-radio-button>
+                </mat-radio-group>   
+            </mat-card-content>
+        </mat-card>
+    </div> 
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Radios with ngModel</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-radio-group [(ngModel)]="favoriteSeason" fxLayout="column" fxLayoutAlign="center">
+                    <mat-radio-button *ngFor="let season of seasons" [value]="season" class="season-item">
+                      {{season}}
+                    </mat-radio-button>
+                </mat-radio-group>
+                <div class="py-1">Your favorite season is: <b> {{favoriteSeason}} </b></div>
+            </mat-card-content>
+        </mat-card>
+    </div> 
+</div> -->

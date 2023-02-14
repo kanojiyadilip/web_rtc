@@ -1,0 +1,13 @@
+<h1 mat-dialog-title style="text-align: center;">
+  Are you sure delete this {{data.name}} !
+</h1>
+<!-- <div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <input matInput tabindex="1" [(ngModel)]="data.id">
+  </mat-form-field>
+</div> -->
+<div mat-dialog-actions style="text-align: center;">
+  <button mat-button [mat-dialog-close]="data.id" tabindex="2">No</button>
+  <button mat-button (click)="onNoClick(data.id)" tabindex="-1">Yes</button>
+</div>

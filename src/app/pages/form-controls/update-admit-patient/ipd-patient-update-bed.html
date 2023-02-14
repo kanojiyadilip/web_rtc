@@ -1,0 +1,71 @@
+            <mat-card-content *ngIf="datam != 'delete'">
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Bed Category" (selectionChange)="getbed($event.value)" formControlName="bedCategoryId" [(ngModel)]="data.bedCategoryId" required>
+                                        <mat-option disable>-- Select Bed Category --</mat-option>
+                                        <mat-option *ngFor="let allBedCs of allBedC?.data" value={{allBedCs._id}}>
+                                            {{allBedCs.categoryName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bedCategoryId.valid">Patient bed  category is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <mat-select placeholder="Bed" formControlName="bedId" [(ngModel)]="data.bedId" required>
+                                        <mat-option disable>-- Select Bed Category --</mat-option>
+                                        <mat-option *ngFor="let allBeds of allBed?.data" value={{allBeds._id}}>
+                                            {{allBeds.bedNo}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="!form.controls.bedId.valid">Patient bed is required</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Per Day Price" [(ngModel)]="bedPrice" formControlName="perDayPrice">
+                                    <mat-error *ngIf="!form.controls.perDayPrice.valid">per day price is required</mat-error>
+                                </mat-form-field>
+                            </td>                            
+                        </tr>
+                    </table>                   
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                           <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Admit Date" autocomplete="off" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" [(ngModel)]="data.inDate" formControlName= "inDate" >   
+                                    <owl-date-time #dt5></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.inDate.valid">in date is required</mat-error> 
+                                </mat-form-field>
+                            </td>                            
+                            <td>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Discharge Date" autocomplete="off" [min]="min" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6" [(ngModel)]="data.outDate" formControlName= "outDate" >   
+                                    <owl-date-time #dt6></owl-date-time> 
+                                    <mat-error *ngIf="!form.controls.outDate.valid">out date date is required</mat-error> 
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>           
+                    <button style="margin-top: 20px" mat-raised-button color="primary" class="m-1">Submit</button>
+                </form>
+            </mat-card-content>
+
+<mat-card-content *ngIf="datam == 'delete'">
+<h1 mat-dialog-title>
+  Are you sure delete this patient bed !
+</h1>
+<!-- <div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <input matInput tabindex="1" [(ngModel)]="data.id">
+  </mat-form-field>
+</div> -->
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.id" tabindex="2">No</button>
+  <button mat-button (click)="onNoClickDelete(data1.PatientBedId)" tabindex="-1">Yes</button>
+</div>       
+</mat-card-content>     

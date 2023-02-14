@@ -1,0 +1,50 @@
+<mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+        <table cellspacing="0" class="w-100">
+            <tr>
+                <td>
+                    <mat-form-field class="w-100">
+                        <mat-select placeholder="Appointment Status" formControlName="appointmentStatus" [(ngModel)]="data.appointmentStatus" required>
+                            <mat-option disable>-- Select Appointment Status--</mat-option>
+                            <mat-option value="PENDING">PEDNING</mat-option>
+                            <mat-option value="CANCEL">CANCEL</mat-option>
+                            <mat-option value="PAID">PAID</mat-option>
+                        </mat-select> 
+                        <mat-error *ngIf="!form.controls.appointmentStatus.valid">Appointment Status charges is required</mat-error>
+                     </mat-form-field>   
+                </td>   
+            </tr>
+        </table>                      
+        <table *ngIf="data.appointmentStatus == 'PAID'" cellspacing="0" class="w-100">
+            <tr>
+               <td>
+                    <mat-form-field class="w-100">
+                        <textarea matInput placeholder="Doctor Charges" [(ngModel)]="data.doctorCharges" formControlName="doctorCharges"></textarea>
+                        <mat-error *ngIf="!form.controls.doctorCharges.valid">doctor charges is required</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+               <td>
+                    <mat-form-field class="w-100">
+                        <textarea matInput placeholder="Other Charges" [(ngModel)]="data.otherCharges" formControlName="otherCharges"></textarea>
+                        <mat-error *ngIf="!form.controls.otherCharges.valid">other charges is required</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr> 
+            <tr>
+                <td>
+                    <mat-form-field class="w-100">
+                        <mat-select placeholder="Payment Mode" formControlName="paymentMode" [(ngModel)]="payM" required>
+                            <mat-option disable>-- Select Payment Mode--</mat-option>
+                            <mat-option value="CASH">CASH</mat-option>
+                            <mat-option value="CARD">CARD</mat-option>
+                        </mat-select> 
+                        <mat-error *ngIf="!form.controls.appointmentStatus.valid">payment mode is required</mat-error>
+                     </mat-form-field>   
+                </td>                
+            </tr>           
+        </table>                                 
+        <button style="margin-top: 20px" mat-raised-button color="primary" class="m-1">Submit</button>
+    </form>
+</mat-card-content>

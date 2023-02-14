@@ -1,0 +1,12 @@
+{
+    "dbname": "chat",
+    "port": 3001,
+    "port_ssl" : 3002,
+    "email": "inspeerodev@gmail.com",
+    "password": "Insper020714",
+    "url": "http://localhost:3000",
+    "fb_client_id": "490961985038672",
+    "fb_client_secret": "20fb44e8ac565698e1477bce565bab46",
+    "web_url": "https://vps3.inspeero.com:4002"
+
+}

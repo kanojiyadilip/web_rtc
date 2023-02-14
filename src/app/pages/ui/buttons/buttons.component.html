@@ -1,0 +1,207 @@
+<div fxLayout="column">
+    <div class="flex-p">
+            <div fxLayout="column" class="mat-elevation-z8"> 
+                    <table cellspacing="0" class="w-100">
+                        <tr>
+                            <td>                                                
+                                <mat-form-field class="w-100">
+                                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter all columns">
+                                </mat-form-field> 
+                            </td>
+                            <td>
+                            <button style="margin-bottom:2.5px; background-color: #54e87c; float: right;  width: 80px;" mat-raised-button color="accent" (click)="printToPdf('tablePrint')"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+                            <button style="float: right; max-width: 150px; background-color:#b3cefa" mat-raised-button (click)="ExportTOExcel()"><i class="fa fa-download" aria-hidden="true"></i> Excel</button>                                
+                            </td>
+                        </tr>
+                    </table>
+                </div>         
+        <mat-table #table [dataSource]="dataSource"  id="tablePrint" class="mat-elevation-z8">       
+            <ng-container matColumnDef="No">
+                <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+            </ng-container>         
+            <ng-container matColumnDef="Name">
+                <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>     
+            <ng-container matColumnDef="Gender">
+                <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.gender}} </mat-cell>
+            </ng-container>        
+            <ng-container matColumnDef="DOB">
+                <mat-header-cell *matHeaderCellDef> DOB </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.dob | date}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Mobile">
+                <mat-header-cell *matHeaderCellDef> MObile No. </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.mobileNo1}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="City">
+                <mat-header-cell *matHeaderCellDef> City </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.city}} </mat-cell>
+            </ng-container> 
+            <ng-container matColumnDef="State">
+                <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.state}} </mat-cell>
+            </ng-container> 
+            <ng-container matColumnDef="PinCode">
+                <mat-header-cell *matHeaderCellDef> Pin Code </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.pinCode}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+                    <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a routerLink="/master/patient/{{element._id}}" [routerLinkActive]="['link-active']" mat-icon-button>
+                        <mat-icon class="icon-lg">edit</mat-icon>
+                        </a>
+                        <a (click)="dialogComponent.openDialog(element._id,'OPD Patient')" mat-icon-button>
+                        <mat-icon (click)="getAllOpdPatient()" class="icon-lg">delete_forever</mat-icon>
+                        </a>
+                    </mat-cell>
+            </ng-container>                                                            
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+            <mat-paginator #paginator (page)="handlePage($event)" [showFirstLastButtons]="true" [pageSize]="pageSize" [length]="totalSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
+
+
+
+<!-- <div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Basic Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-button>Basic</button>
+                <button mat-button color="primary">Primary</button>
+                <button mat-button color="accent">Accent</button>
+                <button mat-button color="warn">Warn</button>
+                <button mat-button disabled>Disabled</button>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p">
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Raised Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-raised-button class="m-1">Basic</button>
+                <button mat-raised-button color="primary" class="m-1">Primary</button>
+                <button mat-raised-button color="accent" class="m-1">Accent</button>
+                <button mat-raised-button color="warn" class="m-1">Warn</button>
+                <button mat-raised-button disabled class="m-1">Disabled</button>
+            </mat-card-content>
+        </mat-card>
+    </div> 
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Fab Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-fab class="m-1">Basic</button>
+                <button mat-fab color="primary" class="m-1">Primary</button>
+                <button mat-fab color="accent" class="m-1">Accent</button>
+                <button mat-fab color="warn" class="m-1">Warn</button>
+                <button mat-fab disabled class="m-1">Disabled</button>
+                <button mat-fab class="m-1">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <a mat-fab routerLink="." class="m-1">Link</a>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Mini Fab Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-mini-fab class="m-1">Basic</button>
+                <button mat-mini-fab color="primary" class="m-1">Primary</button>
+                <button mat-mini-fab color="accent" class="m-1">Accent</button>
+                <button mat-mini-fab color="warn" class="m-1">Warn</button>
+                <button mat-mini-fab disabled class="m-1">Disabled</button>
+                <button mat-mini-fab class="m-1">
+                  <mat-icon>favorite</mat-icon>
+                </button>
+                <a mat-mini-fab routerLink="." class="m-1">Link</a>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Icon Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-icon-button>
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-icon-button color="primary">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-icon-button color="accent">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-icon-button color="warn">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-icon-button disabled>
+                    <mat-icon>favorite</mat-icon>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    </div> 
+    <div fxFlex="50" class="flex-p"> 
+        <mat-card>
+            <mat-card-header>                
+                <mat-card-subtitle><h2>Toggle Buttons</h2></mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>
+                    Default appearance:
+                    <mat-button-toggle-group #group="matButtonToggleGroup">
+                        <mat-button-toggle value="left">
+                                <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="justify" disabled>
+                            <mat-icon>format_align_justify</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </p>
+                
+                <p class="mt-1">
+                    Legacy appearance:
+                    <mat-button-toggle-group appearance="legacy" #group="matButtonToggleGroup">
+                        <mat-button-toggle value="left">
+                                <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="justify" disabled>
+                            <mat-icon>format_align_justify</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </p>
+
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>           
+</div> -->

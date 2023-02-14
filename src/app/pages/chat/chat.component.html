@@ -1,0 +1,356 @@
+<!-- <p>isCallOnGoing==> {{isCallOnGoing}}</p> -->
+<section class="overlay" *ngIf="isCallOnGoing">
+    <div id="remote-video">
+    </div>
+    <div>
+        <span class="dot dbtn"> 
+            <mat-icon style="margin-top: 15px;" (click)="isCallOnGoing=false; close()">call</mat-icon>
+        </span>
+        <span class="dott btns">
+            <mat-icon style="margin-top: 15px;" (click)="shareScreen()"> screen_share </mat-icon>
+        </span>
+        <span class="dott bt_d_video">
+            <mat-icon style="margin-top: 15px;" (click)="stopVideoCall()"> videocam_off </mat-icon>
+        </span>
+    </div>
+</section>
+
+
+
+
+
+
+<!-- <div class="container-fluid main-container-width-with-header" style="margin-top: 62px">
+    <div class="row">
+      <div class="col-md-6">
+        <span>PeerId: {{peerId}}</span>
+        <div style="margin-top: 20px;">
+          <input type="text" placeholder="Peer Id" [(ngModel)]='peerIdShare'/>
+          <button class="button" (click)="connectWithPeer()">Call Peer</button>
+          <button class="button" (click)="screenShare()">Screen share</button>
+        </div>
+      </div>
+    </div>
+</div> -->
+
+<div fxLayout="row wrap" class="full_height" [hidden]="vchat">
+    <div fxFlex="100" class="flex-p"> 
+        <mat-card class="p-0 chat full_height">
+            <mat-sidenav-container>
+              <mat-sidenav #sidenav [opened]="sidenavOpen" [mode]="sidenavOpen ? 'side' : 'over'" class="chat-sidenav mat-elevation-z1">
+                  <mat-toolbar color="primary" class="p-0" fxLayout="row" fxLayoutAlign="space-between center" class="toolbar">
+                      <mat-list class="p-0">
+                          <mat-list-item>
+                              <img matListAvatar [src]="proFilePic('self')">
+                              <h6 class="user_name">{{(this.chatService.currentUser['name'])?this.chatService.currentUser['name']:''}}</h6>  
+                            </mat-list-item>
+                      </mat-list>
+                      <button mat-icon-button [matMenuTriggerFor]="userMenu" #userMenuTrigger="matMenuTrigger">
+                          <mat-icon>more_vert</mat-icon>
+                      </button>                                     
+                  </mat-toolbar>
+                  <mat-menu #userMenu="matMenu" xPosition="before" overlapTrigger="true">
+                      <span (mouseleave)="userMenuTrigger.closeMenu()">
+                          <button mat-menu-item>
+                              <mat-icon>account_circle</mat-icon>
+                              <span>Profile</span>
+                          </button>
+                          <button mat-menu-item (click)="ring()">
+                              <mat-icon>settings</mat-icon>
+                              <span>Settings</span>
+                          </button>
+                          <button mat-menu-item (click)="vchat = !vchat">
+                            <mat-icon>videocam</mat-icon>
+                            <span>video cam</span>
+                          </button>
+                          <button mat-menu-item (click)="_com.logout(thisUseroffline());"> 
+                              <mat-icon>power_settings_new</mat-icon>
+                              <span>Exit chat</span>
+                          </button>
+                      </span>
+                  </mat-menu> 
+                  <mat-nav-list class="p-0 chat-sidenav-list" perfectScrollbar>
+                    <!-- <div [ngClass]="searchOverlay?'noverlay':'soverlay'" [@bounce]="bounce"> -->
+                        <!-- <form> -->
+                            <i [@zoomIn]="zoomIn" class="fa fa-close close_search" (click)="searchOverlay = !searchOverlay; searchData = []" *ngIf="searchOverlay"></i>
+                            <input [@zoomIn]="zoomIn" class="input" type="text" name="search" placeholder="Search.." [formControl]="searchKey" *ngIf="searchOverlay">
+                        <!-- </form> -->
+                    <!-- </div> -->
+                    <div style="height: 24px;">
+                        <i [@zoomIn]="zoomIn" class="fa fa-search search_icon" (click)="searchOverlay = !searchOverlay" *ngIf="!searchOverlay"></i>
+                    </div>
+                    <!-- <button (click)="searchOverlay = !searchOverlay">overlay</button> -->
+
+                    <div *ngIf="searchData" [@zoomIn]="zoomIn">
+                        <mat-list-item  *ngFor="let chat of searchData" (click)="getChat(chat); showChat = true">
+                            <!-- <img matListAvatar src="+(chat.profile_pic)?'{{chatService.baseUrl + chat.profile_pic}}':'assets/img/profile/michael.jpg'}}'+"> -->
+                            <div *ngIf="chat.is_live" class="online"></div>
+                            <div *ngIf="!chat.is_live" class="offline"></div>
+                            <!-- <img matListAvatar [src]="(chat.profile_pic)?chatService.baseUrl + chat.profile_pic:'assets/img/profile/default_user.png'"> -->
+                            <img matListAvatar [src]="proFilePic(chat)">
+                            <h6 matLine> {{chat.name}} </h6>
+                            <br>
+                            <!-- <small>{{chat.msg}}</small> -->
+                            <p matLine fxLayout="row" fxLayoutAlign="none center" class="muted-text">
+                                <span [ngSwitch]="chat.authorStatus">
+                                    <mat-icon *ngSwitchCase="'Online'" class="chat-status-icon">check_circle</mat-icon>
+                                    <mat-icon *ngSwitchCase="'Offline'" class="chat-status-icon">highlight_off</mat-icon>
+                                    <mat-icon *ngSwitchCase="'Away'" class="chat-status-icon">schedule</mat-icon>
+                                    <mat-icon *ngSwitchCase="'Do not disturb'" class="chat-status-icon">not_interested</mat-icon>
+                                </span>
+                                <span class="author-status">{{chat.authorStatus}}</span>
+                            </p>
+                        </mat-list-item>
+                    </div>                    
+                    
+                    <div *ngIf="!searchOverlay" [@zoomIn]="zoomIn">
+                      <mat-list-item  *ngFor="let chat of chatService.users" (click)="getChat(chat); showChat = true" style="height: 60px;">
+                          <!-- <img matListAvatar src="+(chat.profile_pic)?'{{chatService.baseUrl + chat.profile_pic}}':'assets/img/profile/michael.jpg'}}'+"> -->
+                         <!-- <div style="position: absolute;"> -->
+                            <div *ngIf="chat.is_live" class="online"></div>
+                            <div *ngIf="!chat.is_live" class="offline"></div>
+                          <!-- <img matListAvatar [src]="(chat.profile_pic)?chatService.baseUrl + chat.profile_pic:'assets/img/profile/default_user.png'"> -->
+                          <img matListAvatar [src]="proFilePic(chat)">
+                          <!-- </div> -->
+                          <!-- <img matListAvatar [src]="chat.image?chat.image:'assets/img/profile/michael.jpg'"> -->
+                          <h6 matLine> {{chat.name}} </h6>
+                          <br>
+                          <!-- <small>{{chat.msg}}</small> -->
+                          <p matLine fxLayout="row" fxLayoutAlign="none center" class="muted-text">
+                            <small>{{chat.msg}}</small>
+                              <span [ngSwitch]="chat.authorStatus">
+                                  <mat-icon *ngSwitchCase="'Online'" class="chat-status-icon">check_circle</mat-icon>
+                                  <mat-icon *ngSwitchCase="'Offline'" class="chat-status-icon">highlight_off</mat-icon>
+                                  <mat-icon *ngSwitchCase="'Away'" class="chat-status-icon">schedule</mat-icon>
+                                  <mat-icon *ngSwitchCase="'Do not disturb'" class="chat-status-icon">not_interested</mat-icon>
+                              </span>
+                              <span class="author-status">{{chat.authorStatus}}</span>
+                          </p>
+                          <hr class="hr">
+                      </mat-list-item>
+                    </div>
+                  </mat-nav-list>
+              </mat-sidenav>
+            
+              <div>
+                  <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                          <button mat-icon-button (click)="sidenav.toggle()" >
+                              <mat-icon>list</mat-icon>
+                          </button>
+                          <mat-list *ngIf="chatService.currentChat" class="p-0">
+                              <mat-list-item>
+                                    <div *ngIf="chatService.currentChat['is_live']" class="online"></div>
+                                    <div *ngIf="!chatService.currentChat['is_live']" class="offline"></div>
+                                    <img matListAvatar [src]="proFilePic(chatService.currentChat)">
+                              </mat-list-item>
+                          </mat-list>
+                          <span *ngIf="chatService.currentChat" class="author-name">{{chatService.currentChat['name']}}</span>
+                      </div>
+                      <button *ngIf="chatService.currentChat" mat-icon-button (click)="calling()">
+                        <mat-icon>videocam</mat-icon>
+                      </button>
+                      <button mat-icon-button [matMenuTriggerFor]="personMenu" #personMenuTrigger="matMenuTrigger"  *ngIf="chatService.typeingKy">
+                          <mat-icon>more_vert</mat-icon>
+                      </button> 
+                  </mat-toolbar>
+                  <mat-menu #personMenu="matMenu" xPosition="before" overlapTrigger="true">
+                      <span (mouseleave)="personMenuTrigger.closeMenu()">
+                          <button mat-menu-item>
+                              <mat-icon>account_circle</mat-icon>
+                              <span>Contact info</span>
+                          </button>
+                          <button mat-menu-item>
+                              <mat-icon>volume_mute</mat-icon>
+                              <span>Mute</span>
+                          </button>
+                          <button mat-menu-item> 
+                              <mat-icon>delete_forever</mat-icon>
+                              <span>Clear chat</span>
+                          </button>
+                      </span>
+                  </mat-menu> 
+                  <div class="chat-content" perfectScrollbar #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                      <mat-list *ngIf="talks" class="p-0" >
+                        <ul>
+                            <li  *ngFor="let talk of chatService.messages">
+                                <ul>
+                                    <li>
+                                        <small [@bounce]="bounce" [ngClass]="(talk.sender_id == chatService.currentUser['_id']) ? 'time_right' : 'time_left'">
+                                            {{talk.created_timestamp | date:"dd MMMM, yyyy 'at' HH:mm"}}
+                                        </small>
+                                    </li>
+                                    <li *ngIf="talk.message.substr(talk.message.length - 3) !== 'png'">
+                                        <div [@bounce]="bounce" [ngClass]="(talk.sender_id == chatService.currentUser['_id']) ? 'right' : 'left'">
+                                            <p class="message">
+                                                <span>{{talk.message}}</span>
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li *ngIf="talk.message.substr(talk.message.length - 3) == 'png'">
+                                        <div [@bounce]="bounce" [ngClass]="(talk.sender_id == chatService.currentUser['_id']) ? 'img_right' : 'img_left'">
+                                            <img matListAvatar [src]="chatService.baseUrl + talk.message" style="width: 100%;">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="chatService.typeingKy">
+                                <div [@bounce]="bounce" class="left">
+                                    <div class="spinner">
+                                        <i>typing </i>
+                                        <div class="bounce1"></div>
+                                        <div class="bounce2"></div>
+                                        <div class="bounce3"></div>
+                                    </div>
+                                </div>    
+                            </li>
+                            <!-- <li *ngIf="image" >
+                                <div [@bounce]="bounce" class="img_right">
+                                    <img matListAvatar [src]="image" style="width: 100%;">
+                                </div>    
+                            </li>                             -->
+                            <li>
+                                <div class="mobile">
+
+                                </div>
+                            </li>
+                        </ul>
+                          <!-- <mat-list-item *ngFor="let talk of chatService.messages" class="talk-item"> -->
+                              <!-- <div [ngStyle]="{'text-align': (talk.sender_id == chatService.currentUser['_id'])?'right':'left'}"> -->
+                              <!-- <img matListAvatar [src]="talk.image?'talk.image':'assets/img/profile/michael.jpg'"> -->
+                              <!-- <div  [ngClass]="(talk.sender_id == chatService.currentUser['_id'])?'right_msg':'left_msg'"> -->
+                                    <!-- [ngStyle]="{'text-align': (talk.sender_id == chatService.currentUser['_id'])?'right':'left'}"    -->
+                                    <!-- <p matLine class="message">
+                                        <span [ngClass]="(talk.my) ? 'bg-primary' : 'bg-accent'">{{talk.message}}</span>
+                                    </p>                            -->
+                                    <!-- [ngStyle]="{'text-align': (talk.sender_id == chatService.currentUser['_id'])?'right':'left'}"   -->
+                                    <!-- <p matLine class="message-date">
+                                        <small>{{talk.created_timestamp | date:"dd MMMM, yyyy 'at' HH:mm"}}</small>
+                                    </p>  -->
+                              <!-- </div> -->
+                              <!-- </div> -->
+                          <!-- </mat-list-item> -->
+                      </mat-list>
+                      <div *ngIf="!showChat" fxLayout="column" fxLayoutAlign="center center" class="h-100 empty">
+                          <!-- <mat-icon>chat</mat-icon>    -->
+                          <img [src]="chatlogo" class="logo">         
+                          <p>Select a interlocutor for talk</p>
+                      </div> 
+                  </div>
+                  <mat-divider></mat-divider>
+                  <mat-card class="chat-actions"> 
+                        <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="textArea">
+                          <!-- <mat-form-field class="w-100"> -->
+                            <input matInput placeholder="Enter your text..." (keyup)="sendMessage($event)" [(ngModel)]="newMessage" autocomplete="off" class="ip_msg">
+                            <!-- </textarea> -->
+                            <!-- </mat-form-field> -->
+
+                          <div fxLayout="row" fxLayoutAlign="scenter center">
+                              <!-- <button mat-icon-button type="button" (click)="chooseFile();">
+
+                                <div style="height:0px;overflow:hidden">
+                                    <input type="file" id="fileInput" name="fileInput" (change)="changeListener($event)" />
+                                 </div>
+
+                                  <mat-icon>attach_file</mat-icon>
+                              </button> -->
+                              <button mat-mini-fab color="primary" type="button" (click)="sendMessage($event)">
+                                  <mat-icon>send</mat-icon>
+                              </button>
+                          </div>
+                        </div>
+                  </mat-card>
+              </div>
+            
+            </mat-sidenav-container>
+        </mat-card>
+      </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div [hidden]="!vchat">
+    <h2 *ngIf="error!=''" class="alert alert-warning">  {{error}}</h2>
+    <h2 *ngIf="info!=''" class="alert alert-info">  {{info}}</h2>
+    <strong>
+      Stage 1
+    </strong>
+    <hr />
+    <div class="row">
+      <div class="col-6">
+        Is Initiator?
+        <br />
+        <input type="radio" name="isInit" [value]="true" [(ngModel)]="isInitiator" />Yes
+        <br />
+        <input type="radio" name="isInit" [value]="false" [(ngModel)]="isInitiator" />No
+        <br />
+        <button (click)="loadResources()">
+          <span *ngIf="isInitiator">Load From Caller</span>
+          <span *ngIf="!isInitiator">Load From Receiver</span>
+        </button>
+        <br />
+        My Peer:
+        <input [(ngModel)]="myPeerDetails" />
+      </div>
+      <div class="col-6">
+        <div style="height:300px;">
+          <video #myVideoCtr muted style="width: 100%"></video>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <strong>
+      Stage 2
+    </strong>
+    <hr />
+    copy data from one Id to another.
+    <div class="row">
+      <div class="col-6">
+        Other Peer Details:
+        <input [(ngModel)]="otherUserPeerDetails" />
+        <br />
+        <button (click)="connect()">Connect</button>
+        <p>myPeerDetails ---No-{{lineNo}}------> {{myPeerDetails | json}}</p>
+      </div>
+      <div class="col-6">
+        <div style="height:300px;">
+          <video #otherUserVideoCtr style="width: 100%"></video>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="caller" *ngIf="this.chatService.callerData">
+    <p class="caller_name">{{this.chatService.callerData.name}}</p>
+    <div class="greenCall">
+        <i class="fa fa-phone phone_green"></i>
+    </div>
+    <div class="redCall">
+        <i class="fa fa-phone phone_red"></i>
+    </div>
+</div>
+
+
+
+

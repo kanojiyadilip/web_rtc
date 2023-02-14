@@ -1,0 +1,289 @@
+<div fxLayout="column">
+        <div class="flex-p">
+            <mat-card>
+                <mat-card-header fxLayoutAlign="center">                
+                    <mat-card-subtitle><h4>Doctor Detail</h4></mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="column" fxLayoutAlign="center">
+                        <mat-form-field>
+                            <input matInput placeholder="Doctor Name" [(ngModel)]="data.name" formControlName="name">
+                            <mat-error *ngIf="!form.controls.name.valid">doctor name is required</mat-error>                    
+                        </mat-form-field>
+    
+                        <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <mat-select placeholder="Gender" [(ngModel)]="data.gender" formControlName="gender">
+                                                    <mat-option value="MALE">MALE</mat-option>
+                                                    <mat-option value="FEMALE">FEMALE</mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="!form.controls.gender.valid">gender is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput [matDatepicker]="picker1" [(ngModel)]="data.dob" placeholder="Date Of Birth" formControlName="dob">
+                                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker1></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput [matDatepicker]="picker2" [(ngModel)]="data.JoiningDate" placeholder="Joining Date" formControlName="JoiningDate">
+                                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker2></mat-datepicker>
+                                    </mat-form-field>                                        
+                                </td>                                
+                            </tr>
+                        </table>
+                        <table cellspacing="0" class="w-100">
+                                <tr>
+<!--                                     <td>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Degree" [(ngModel)]="data.degree" formControlName="degree">
+                                            <mat-error *ngIf="!form.controls.degree.valid">required a degree</mat-error>
+                                        </mat-form-field>
+                                    </td> -->
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                            <!-- <input matInput placeholder="Degree" formControlName="degree"> -->
+                                                <mat-select placeholder="Degree" [(ngModel)]="data.degree" formControlName="degree" multiple>
+                                                    <mat-option *ngFor="let topping of doctorDegree" [value]="topping">{{topping}}</mat-option>
+                                                </mat-select>
+                                            <mat-error *ngIf="!form.controls.degree.valid">required a degree</mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                                <mat-select placeholder="Year Of Experience" [(ngModel)]="data.experience" formControlName="experience" >
+                                                    <mat-option *ngFor="let topping of experience" [value]="topping">{{topping}}</mat-option>
+                                                </mat-select>
+                                            <mat-error *ngIf="!form.controls.experience.valid">required a year of experience</mat-error>
+                                        </mat-form-field>
+                                    </td>                                    
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                                <mat-select  placeholder="Department" [(ngModel)]="data.department" formControlName="department" >
+                                                        <mat-option value="0" disable>-- Select Day --</mat-option>
+                                                        <mat-option *ngFor="let docDecps of docDecp?.data" value={{docDecps.departmentName}}>
+                                                            {{docDecps.departmentName}}
+                                                        </mat-option>
+                                                </mat-select> 
+                                            <mat-error *ngIf="!form.controls.department.valid">department is required</mat-error>
+                                        </mat-form-field>
+                                    </td>    
+                                </tr>
+                        </table>                         
+                        <table cellspacing="0" class="w-100">
+                                <tr>                                    
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Mobile Number" [(ngModel)]="data.mobileNo1" formControlName="mobileNo1">
+                                            <mat-error *ngIf="!form.controls.mobileNo1.valid">required a valid 10 digit of mobile number</mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Mobile Number (Optional)" [(ngModel)]="data.mobileNo2" formControlName="mobileNo2">
+                                            <mat-error *ngIf="!form.controls.mobileNo2.valid">required a valid 10 digit of mobile number</mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                        </table>                    
+                        
+                        <mat-form-field class="w-100">
+                            <textarea matInput placeholder="Address" [(ngModel)]="data.address" formControlName="address">1600 Amphitheatre Pkwy</textarea>
+                            <mat-error *ngIf="!form.controls.address.valid">address is required</mat-error>
+                        </mat-form-field>
+    
+                        <!-- <mat-form-field class="w-100">
+                            <textarea matInput placeholder="Address 2"></textarea>
+                        </mat-form-field>                    -->
+    
+                        <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <mat-select (selectionChange)="select($event.value)" placeholder="State" [(ngModel)]="data.state" formControlName="state">
+                                                    <mat-option value="0" disable>-- Select State --</mat-option>
+                                                    <mat-option *ngFor="let stateDatas of stateData?.data" value={{stateDatas.state}}>
+                                                        {{stateDatas.state}}
+                                                    </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="!form.controls.state.valid">state is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <mat-select placeholder="City" [(ngModel)]="data.city" formControlName="city">
+                                                    <mat-option value="0" disable>-- Select City --</mat-option>
+                                                    <mat-option *ngFor="let cityDatas of cityData?.data" value={{cityDatas.city_name}}>
+                                                        {{cityDatas.city_name}}
+                                                    </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="!form.controls.city.valid">city is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                        <input matInput  placeholder="Pin Code" [(ngModel)]="data.pinCode" formControlName="pinCode">
+                                        <mat-error *ngIf="!form.controls.pinCode.valid">required a valid 6 digit of Pin Code</mat-error>
+                                        <!-- <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint> -->
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table cellspacing="0" class="w-100">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput placeholder="OPD Charge 1st Time" [(ngModel)]="data.opdCharge1" formControlName="opdCharge1" oninput="validity.valid||(value='');">
+                                            <mat-error *ngIf="!form.controls.opdCharge1.valid">doctor opd Charge is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput placeholder="OPD Charge 2nd Time" [(ngModel)]="data.opdCharge2" formControlName="opdCharge2" oninput="validity.valid||(value='');">
+                                            <mat-error *ngIf="!form.controls.opdCharge2.valid">doctor opd Charge is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput placeholder="OPD Charge 3rd Time" [(ngModel)]="data.opdCharge3" formControlName="opdCharge3" oninput="validity.valid||(value='');">
+                                            <mat-error *ngIf="!form.controls.opdCharge3.valid">doctor opd Charge is required</mat-error>
+                                    </mat-form-field>
+                                </td> 
+                                <td>
+                                    <mat-form-field class="w-100">
+                                            <input matInput placeholder="IPD Charge" [(ngModel)]="data.ipdCharge" formControlName="ipdCharge" oninput="validity.valid||(value='');">
+                                            <mat-error *ngIf="!form.controls.ipdCharge.valid">doctor ipd Charge is required</mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <!-- <mat-form-field class="w-100"> -->
+                                            <input style="margin-left: 20px" type="file" (change)="changeListener($event)">
+                                            <!-- <mat-error *ngIf="!form.controls.ipdCharge.valid">doctor ipd Charge is required</mat-error> -->
+                                    <!-- </mat-form-field> -->
+                                </td>                                
+                            </tr>
+                        </table>                        
+
+                        <!-- <mat-card-content>
+
+                <mat-card formArrayName="schedules">
+                        <mat-card-title>Schedules</mat-card-title>
+                        <mat-divider></mat-divider>
+                        <div *ngFor="let schedule of form.controls.schedules.controls; let i=index">
+                                <mat-divider *ngIf="form.controls.schedules.controls.length > 1 && i > 0" ></mat-divider><br>
+                                
+                                <div [formGroupName]="i">
+                                <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="3.5%" fxLayoutAlign="center">
+                                                        
+                                    <mat-form-field  fxFlex="10%" fxFlex.xs="20"> 
+                                    
+                                    <mat-select  placeholder="Day" [(ngModel)]="schedule.drday" formControlName="schedule.drday">
+                                            <mat-option value="0" disable>-- Select Day --</mat-option>
+                                            <mat-option *ngFor="let dayDatas of dayData?.data" value={{dayDatas.dayName}} >
+                                                {{dayDatas.dayName}}
+                                            </mat-option>
+                                    </mat-select> 
+
+                                    <mat-error *ngIf="schedule.controls.drday.invalid">
+                                            Day name is required.        
+                                        </mat-error>                      
+                                    </mat-form-field>
+                    
+                                    <mat-form-field  fxFlex="20%"  fxFlex.xs="grow"> 
+                                    <input atp-time-picker type="time" [ngModel]="timeObj.from" matInput placeholder="From Time" [(ngModel)]="schedule.drfrom" formControlName="schedule.drfrom" required>
+                                    <mat-error *ngIf="schedule.controls.drfrom.invalid">
+                                            From Time is required.        
+                                        </mat-error>                       
+                                    </mat-form-field>
+                                     
+                                    <div fxLayout.xs="row">
+                                    <mat-form-field  > 
+                                    <input atp-time-picker type="time" [ngModel]="timeObj.to" matInput placeholder="To Time" [(ngModel)]="schedule.drto" formControlName="schedule.drto" required>
+                                    <mat-error *ngIf="schedule.controls.drto.invalid">
+                                            TO Time is required.        
+                                        </mat-error>                       
+                                    </mat-form-field>
+                    
+                                    <button type="button" mat-mini-fab color="warn" fxFlex="nogrow"
+                                            *ngIf="form.controls.schedules.controls.length > 1" (click)="removeRow(i)">
+                                        <mat-icon>delete forever</mat-icon>
+                                    </button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <mat-divider></mat-divider>
+                            <mat-card-actions style="text-align: center">
+                                <button type="button" mat-raised-button (click)="addRow()">
+                                Add new Line
+                                </button>
+                            </mat-card-actions>
+                            </mat-card> -->
+
+
+                        <!-- <table>  
+                                <tr *ngFor="let fieldar of fieldArray; let i = index">
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                        <input matInput  [(ngModel)]="fieldar.day" disabled/>
+                                        </mat-form-field>
+                                    </td>            
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                        <input matInput [(ngModel)]="fieldar.form" disabled/>
+                                        </mat-form-field>
+                                    </td>
+                                     <td>
+                                        <mat-form-field class="w-100">
+                                        <input matInput [(ngModel)]="fieldar.to" disabled/>
+                                        </mat-form-field>    
+                                    </td>
+                                    <td>
+                                        <button  style="max-width: 30px" mat-raised-button color="warn" (click)="deleteFieldValue(i)">-</button>
+                                    </td>                                    
+                                </tr>
+                        
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                       <input matInput placeholder="Day" [(ngModel)]="newAttribute.day" />
+                                       <mat-select  placeholder="Day" (ngModel)]="newAttribute.day" >
+                                            <mat-option value="0" disable>-- Select Day --</mat-option>
+                                            <mat-option *ngFor="let dayDatas of dayData?.data" value={{dayDatas.dayName}}>
+                                                {{stateDatas.dayName}}
+                                            </mat-option>
+                                    </mat-select>                                                        
+                                        </mat-form-field>
+                                    </td>            
+                                    <td>
+                                        <mat-form-field class="w-100">    
+                                        <input matInput [ngxTimepicker]="picker" placeholder="From Time" [(ngModel)]="newAttribute.form" />
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field class="w-100">
+                                        <input matInput placeholder="To Time" [(ngModel)]="newAttribute.to"  />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <button style="max-width: 30px" mat-raised-button (click)="addFieldValue()">+</button>
+                                    </td>            
+                                </tr>
+                                <tr>
+                            </table>                         -->
+                        <!-- </mat-card-content> -->
+                        <button style="margin-top: 5px" mat-raised-button color="primary" class="m-1">Submit</button>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+        
